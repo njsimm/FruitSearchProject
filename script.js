@@ -5,29 +5,27 @@ const fruit = ['Apple', 'Apricot', 'Avocado 🥑', 'Banana', 'Bilberry', 'Blackb
 
 //filter through the fruit list for a matching string, then adds to an array and returns a array with only matches
 function search(str) {
-	let results = [];
+	if (!str) return []; // logic to not show the entire array when backspace all characters
 
-	fruit.filter(function(val){						
-		if(val.toLowerCase().includes(str)){
-			results.push(val)
-		}				
+	const results = fruit.filter(function(val){						
+		return val.toLowerCase().includes(str)
+			
 	})
-	console.log(results)
+	console.log('search',results)
 	return results;
 }
 
 //this is the function that is being run for the keyup event listener
+//good practice to pull out inner calls to their own variables
 function searchHandler(e) {
-	showSuggestions(search(input.value.toLowerCase()))
+	const lowerCaseResults = search(input.value.toLowerCase())
+	showSuggestions(lowerCaseResults)
 	console.log (input.value)
-	deleteifEmpty()
 }
 
-
-// did not use inputVal argument here, do I need to?
 function showSuggestions(results) {
 	suggestions.innerHTML = ''
-
+	//can add way to bold innerHTML as person types
 	for (let sugg of results){
 		let newListEl = document.createElement('li');
 		newListEl.innerText = sugg
@@ -42,12 +40,6 @@ function useSuggestion(e) {
 	suggestions.innerHTML = ''
 }
 
-function deleteifEmpty(){
-	if(input.value === ''){
-		suggestions.innerHTML = ''
-	
-	}
-}
 
 input.addEventListener('keyup', searchHandler);
 suggestions.addEventListener('click', useSuggestion);
